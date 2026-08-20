@@ -1,0 +1,26 @@
+name: Meme Radar checks
+
+on:
+  push:
+    paths:
+      - projects/meme-radar/**
+      - .github/workflows/meme-radar.yml
+  pull_request:
+    paths:
+      - projects/meme-radar/**
+      - .github/workflows/meme-radar.yml
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Python
+        run: |
+          cd projects/meme-radar
+          python3 -m py_compile meme_radar.py tests/test_meme_radar.py
+          python3 -m unittest discover -s tests -p 'test_*.py'

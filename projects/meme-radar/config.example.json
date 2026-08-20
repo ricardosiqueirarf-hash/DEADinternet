@@ -1,0 +1,11 @@
+{
+  "subreddits": [
+    "memes",
+    "ComedyCemetery"
+  ],
+  "listing": "hot",
+  "limit": 25,
+  "top": 30,
+  "timeout": 15,
+  "allow_nsfw": false
+}
