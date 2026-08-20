@@ -1,17 +1,59 @@
 # AGENTS.md — DEADinternet
 
-## Missão
+## Escopo atual
 
-DEADinternet é um sistema local para coletar referências públicas de vídeos curtos, estudar padrões e transformar referências em propostas de conteúdo original. Não é uma ferramenta de repostagem automática.
+O projeto principal do repositório é o **Meme Radar**, localizado em `projects/meme-radar/`. Leia também `projects/meme-radar/AGENTS.md` antes de alterar esse projeto.
 
-## Ambiente
+O código antigo na raiz é uma aplicação FastAPI experimental preservada como legado. Não mova, remova ou misture seus arquivos com o Meme Radar sem uma migração aprovada e testada.
 
-- Linux
-- aplicação: `http://127.0.0.1:4750`
-- SuperCodex: `http://127.0.0.1:4747`
-- banco: SQLite local em `data/deadinternet.db`
+## Meme Radar
 
-## Comandos
+- linguagem: Python;
+- arquivo principal: `projects/meme-radar/meme_radar.py`;
+- fonte inicial: Reddit;
+- objetivo: coletar conteúdo público de comédia ácida, observar métricas, deduplicar e ranquear candidatos;
+- IA: opcional e somente nos finalistas;
+- fora do escopo: edição e publicação automática.
+
+## Ambiente legado
+
+- aplicação: `http://127.0.0.1:4750`;
+- SuperCodex: `http://127.0.0.1:4747`;
+- banco: SQLite local em `data/deadinternet.db`.
+
+## Papel do AGENTE · Meme Radar
+
+O agente deve trabalhar em um clone próprio deste repositório, atualizar a `main`, criar branch exclusiva, implementar, testar, revisar o diff, abrir Pull Request e só então integrar. Não deve editar arquivos instalados, o clone técnico do LinuxP ou outros workspaces.
+
+O agente pode:
+
+- desenvolver coletores de fontes públicas;
+- melhorar deduplicação e ranking;
+- estruturar relatórios e finalistas;
+- diagnosticar falhas de fonte;
+- propor uso opcional de IA depois do ranking.
+
+O agente não pode, sem autorização explícita:
+
+- publicar ou editar mídia;
+- baixar e republicar conteúdo protegido;
+- criar ou expor credenciais;
+- ativar tarefas recorrentes;
+- enviar conteúdo a serviços de IA;
+- mudar escopo para outras redes sociais;
+- alterar o LinuxP ou o SuperCodex.
+
+## Testes do Meme Radar
+
+```bash
+cd projects/meme-radar
+python3 -m py_compile meme_radar.py tests/test_meme_radar.py
+python3 -m unittest discover -s tests -p 'test_*.py'
+```
+
+## Aplicação legada
+
+Os comandos abaixo continuam válidos apenas para a aplicação FastAPI da raiz:
 
 ```bash
 ./scripts/install.sh
@@ -20,21 +62,4 @@ DEADinternet é um sistema local para coletar referências públicas de vídeos 
 ./scripts/backup.sh
 ```
 
-## Papel dos agentes do SuperCodex
-
-Os agentes podem analisar referências, extrair tema/gancho/estrutura, propor versões originais, sugerir roteiro, monetização e testes, e devolver resultado estruturado em `agent_workspace/inbox/`.
-
-Os agentes não devem publicar, baixar ou republicar mídia protegida, enviar mensagens, realizar transações, expor a aplicação fora de `127.0.0.1` ou mudar a porta 4750 sem autorização.
-
-## Contrato de integração
-
-1. O DEADinternet cria um pacote Markdown em `agent_workspace/outbox/`.
-2. O agente lê o pacote e produz análise original.
-3. O resultado deve ser salvo em `agent_workspace/inbox/` com o mesmo `task_id`.
-4. O resultado permanece pendente até aprovação humana.
-
-O banco local é a fonte de verdade. Arquivos dos agentes são uma interface de troca, não memória canônica.
-
-## Qualidade
-
-Antes de concluir mudanças, execute `./scripts/test.sh`. Preserve compatibilidade com instalação pelo terminal Linux e evite dependências online desnecessárias.
+O banco local da aplicação antiga continua sendo sua fonte de verdade. Os arquivos `agent_workspace/outbox/` e `agent_workspace/inbox/` são apenas interface de troca, não memória canônica.
