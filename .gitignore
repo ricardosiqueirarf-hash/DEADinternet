@@ -15,6 +15,11 @@ agent_workspace/outbox/*
 agent_workspace/inbox/*
 !agent_workspace/inbox/.gitkeep
 
+# Meme Radar local state
+projects/meme-radar/config.json
+projects/meme-radar/data/
+projects/meme-radar/*.log
+
 # Editors / OS
 .vscode/
 .idea/
