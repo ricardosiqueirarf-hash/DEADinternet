@@ -1,18 +1,30 @@
 # DEADinternet
 
-Radar local para estudar referências de Reels, TikTok e Shorts e transformar padrões observados em ideias de conteúdo original.
+Repositório de experimentos locais para estudar conteúdo público e transformar sinais observáveis em análises revisáveis.
 
-## Estado atual — Fase 1 executável
+## Projeto principal — Meme Radar
+
+O escopo corrigido está em [`projects/meme-radar/`](projects/meme-radar/):
+
+- linguagem: Python;
+- arquivo principal: `projects/meme-radar/meme_radar.py`;
+- fonte inicial: Reddit;
+- objetivo: coletar conteúdo público de comédia ácida, analisar métricas, remover duplicados e ranquear candidatos;
+- IA: opcional e somente nos finalistas;
+- fora do escopo: edição e publicação automática.
+
+## Aplicação legada na raiz
+
+A raiz ainda contém a primeira aplicação FastAPI experimental, voltada ao cadastro manual de referências de vídeos curtos:
 
 - FastAPI em `127.0.0.1:4750`;
 - SQLite local;
-- cadastro, listagem, edição, exclusão e filtros via API;
 - dashboard web;
-- score determinístico de oportunidade;
-- fila de tarefas para agentes do SuperCodex;
-- backup local e testes.
+- fila de tarefas para agentes do SuperCodex.
 
-## Instalação no Linux
+Ela foi preservada para não quebrar o histórico, mas não define o escopo atual do Meme Radar.
+
+## Instalação da aplicação legada
 
 ```bash
 git clone https://github.com/ricardosiqueirarf-hash/DEADinternet.git
@@ -22,36 +34,17 @@ chmod +x scripts/*.sh
 ./scripts/run.sh
 ```
 
-Abra `http://127.0.0.1:4750`. O SuperCodex continua separado em `http://127.0.0.1:4747`.
-
-## Usando com SuperCodex
-
-1. No SuperCodex, crie um ambiente cuja pasta raiz seja o clone do `DEADinternet`.
-2. O SuperCodex carregará o `AGENTS.md` da raiz.
-3. No dashboard, use **Enviar ao SuperCodex**.
-4. O sistema criará um pacote em `agent_workspace/outbox/`.
-5. Peça ao agente para processar os pacotes pendentes e salvar cada resposta em `agent_workspace/inbox/<task_id>.json`.
-6. Revise o resultado antes de incorporá-lo ao conteúdo.
-
-O DEADinternet não chama diretamente uma API de IA. A inteligência fica nos agentes do SuperCodex; o DEADinternet mantém banco, fluxo e auditoria local.
-
-## Comandos
+## Executar o Meme Radar
 
 ```bash
-./scripts/run.sh
-./scripts/test.sh
-./scripts/backup.sh
+cd projects/meme-radar
+cp config.example.json config.json
+python3 meme_radar.py --config config.json
+python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
-## API principal
+## SuperCodex
 
-- `GET /health`
-- `GET/POST /api/references`
-- `GET/PATCH/DELETE /api/references/{id}`
-- `POST /api/references/{id}/score`
-- `POST /api/references/{id}/agent-task`
-- `GET /api/stats`
+O LinuxP provisiona um workspace dedicado chamado `AGENTE · Meme Radar`. Esse agente deve manter um clone próprio em `Repositorio/DEADinternet`, trabalhar por branch e Pull Request e limitar suas alterações ao repositório do projeto.
 
-A coleta serve para estudar temas, ganchos, formatos e sinais públicos. O projeto não inclui republicação automática de conteúdo protegido.
-
-Veja também: [`docs/FASE_1.md`](docs/FASE_1.md).
+Nenhum componente publica conteúdo automaticamente. Resultados coletados e análises de IA permanecem pendentes de revisão humana.
