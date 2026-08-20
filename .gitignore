@@ -1,0 +1,21 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local runtime data
+.env
+data/*.db
+data/*.db-*
+backups/*
+!backups/.gitkeep
+agent_workspace/outbox/*
+!agent_workspace/outbox/.gitkeep
+agent_workspace/inbox/*
+!agent_workspace/inbox/.gitkeep
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store

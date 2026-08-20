@@ -1,37 +1,57 @@
 # DEADinternet
 
-Sistema local-first para descobrir tendências, transformar referências em ideias originais e operar um pipeline de conteúdo curto para Reels, TikTok e Shorts.
+Radar local para estudar referências de Reels, TikTok e Shorts e transformar padrões observados em ideias de conteúdo original.
 
-## Princípio central
+## Estado atual — Fase 1 executável
 
-O sistema coleta **metadados, padrões, temas e sinais de desempenho**. Ele não deve depender de republicação automática de conteúdo protegido. A saída do pipeline será conteúdo novo, produzido a partir de roteiro, narração e assets próprios ou licenciados.
+- FastAPI em `127.0.0.1:4750`;
+- SQLite local;
+- cadastro, listagem, edição, exclusão e filtros via API;
+- dashboard web;
+- score determinístico de oportunidade;
+- fila de tarefas para agentes do SuperCodex;
+- backup local e testes.
 
-## Estado atual
+## Instalação no Linux
 
-**Fase 1 — Radar local de conteúdo**
+```bash
+git clone https://github.com/ricardosiqueirarf-hash/DEADinternet.git
+cd DEADinternet
+chmod +x scripts/*.sh
+./scripts/install.sh
+./scripts/run.sh
+```
 
-Objetivo: provar que conseguimos coletar referências, organizar os dados, pontuar oportunidades e selecionar manualmente os melhores temas para produção.
+Abra `http://127.0.0.1:4750`. O SuperCodex continua separado em `http://127.0.0.1:4747`.
 
-A especificação completa está em [`docs/FASE_1.md`](docs/FASE_1.md).
+## Usando com SuperCodex
 
-## Arquitetura inicial
+1. No SuperCodex, crie um ambiente cuja pasta raiz seja o clone do `DEADinternet`.
+2. O SuperCodex carregará o `AGENTS.md` da raiz.
+3. No dashboard, use **Enviar ao SuperCodex**.
+4. O sistema criará um pacote em `agent_workspace/outbox/`.
+5. Peça ao agente para processar os pacotes pendentes e salvar cada resposta em `agent_workspace/inbox/<task_id>.json`.
+6. Revise o resultado antes de incorporá-lo ao conteúdo.
 
-- Python 3.12+
-- SQLite local
-- FastAPI
-- interface web local
-- coleta manual e importação assistida
-- jobs locais
-- armazenamento de arquivos fora do Git
+O DEADinternet não chama diretamente uma API de IA. A inteligência fica nos agentes do SuperCodex; o DEADinternet mantém banco, fluxo e auditoria local.
 
-## Regra de arquitetura
+## Comandos
 
-> Local por padrão. Serviço online apenas quando a função depender diretamente de uma plataforma externa ou exigir disponibilidade pública.
+```bash
+./scripts/run.sh
+./scripts/test.sh
+./scripts/backup.sh
+```
 
-## Fases previstas
+## API principal
 
-1. Radar local de conteúdo
-2. Geração assistida de briefing e roteiro
-3. Produção semiautomática de assets e vídeos
-4. Publicação e coleta de métricas
-5. Aprendizado e otimização do pipeline
+- `GET /health`
+- `GET/POST /api/references`
+- `GET/PATCH/DELETE /api/references/{id}`
+- `POST /api/references/{id}/score`
+- `POST /api/references/{id}/agent-task`
+- `GET /api/stats`
+
+A coleta serve para estudar temas, ganchos, formatos e sinais públicos. O projeto não inclui republicação automática de conteúdo protegido.
+
+Veja também: [`docs/FASE_1.md`](docs/FASE_1.md).
